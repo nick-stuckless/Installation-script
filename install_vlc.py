@@ -1,3 +1,6 @@
+import requests
+import hashlib
+
 def main():
 
     # Get the expected SHA-256 hash value of the VLC installer
@@ -26,10 +29,16 @@ def get_expected_sha256():
     Returns:
         str: Expected SHA-256 hash value of VLC installer
     """
-    # TODO: Step 1
+    file_url = 'https://download.videolan.org/pub/videolan/vlc/last/win64/vlc-3.0.20-win64.exe.sha256'
+    resp_msg = requests.get(file_url)
+
+    if resp_msg.status_code == requests.codes.ok:
+        hash_value = resp_msg.text
+
+        value = hash_value.split('*')   
     # Hint: See example code in lab instructions entitled "Extracting Text from a Response Message Body"
     # Hint: Use str class methods, str slicing, and/or regex to extract the expected SHA-256 value from the text 
-    return 
+    return (value[0])
 
 def download_installer():
     """Downloads, but does not save, the .exe VLC installer file for 64-bit Windows.
@@ -38,8 +47,14 @@ def download_installer():
         bytes: VLC installer file binary data
     """
     # TODO: Step 2
+    file_url2 = 'https://download.videolan.org/pub/videolan/vlc/last/win64/vlc-3.0.20-win64.exe'
+    resp_msg2 = requests.get(file_url2)
+
+    if resp_msg2.status_code == requests.codes.ok:
+        installer_content = resp_msg2.content
+
     # Hint: See example code in lab instructions entitled "Downloading a Binary File"
-    return
+    return installer_content
 
 def installer_ok(installer_data, expected_sha256):
     """Verifies the integrity of the downloaded VLC installer file by calculating its SHA-256 hash value 
@@ -53,6 +68,7 @@ def installer_ok(installer_data, expected_sha256):
         bool: True if SHA-256 of VLC installer matches expected SHA-256. False if not.
     """    
     # TODO: Step 3
+    
     # Hint: See example code in lab instructions entitled "Computing the Hash Value of a Response Message Body"
     return
 

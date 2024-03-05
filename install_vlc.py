@@ -1,5 +1,7 @@
 import requests
 import hashlib
+import subprocess
+import os
 
 def main():
 
@@ -68,9 +70,14 @@ def installer_ok(installer_data, expected_sha256):
         bool: True if SHA-256 of VLC installer matches expected SHA-256. False if not.
     """    
     # TODO: Step 3
-    
+    hash_data = hashlib.sha256(installer_data).hexdigest()
+    if hash_data == expected_sha256:
+        return True
+    else:
+        return False
+
     # Hint: See example code in lab instructions entitled "Computing the Hash Value of a Response Message Body"
-    return
+    
 
 def save_installer(installer_data):
     """Saves the VLC installer to a local directory.
@@ -82,8 +89,12 @@ def save_installer(installer_data):
         str: Full path of the saved VLC installer file
     """
     # TODO: Step 4
+    with open(r'C:\\temp\\installer.exe', 'wb') as file:
+        file.write(installer_data)
+
+    path = r'C:\\temp\\installer.exe'
     # Hint: See example code in lab instructions entitled "Downloading a Binary File"
-    return
+    return path
 
 def run_installer(installer_path):
     """Silently runs the VLC installer.
@@ -92,6 +103,7 @@ def run_installer(installer_path):
         installer_path (str): Full path of the VLC installer file
     """    
     # TODO: Step 5
+    subprocess.run([installer_path, '\\L=1033', '\\S'], shell=True)
     # Hint: See example code in lab instructions entitled "Running the VLC Installer"
     return
     
@@ -102,6 +114,7 @@ def delete_installer(installer_path):
         installer_path (str): Full path of the VLC installer file
     """
     # TODO: Step 6
+    os.remove(installer_path)
     # Hint: See example code in lab instructions entitled "Running the VLC Installer"
     return
 
